@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { SV, PG, SOL, IND, VAL, PR, JR, CS, ST, WA, TN, OTHER } from "./data";
+import { SV, SVC, PG, SOL, IND, VAL, PR, JR, CS, ST, WA, TN, OTHER } from "./data";
 import EnquiryForm, { fmt } from "./Form.jsx";
 import { initCanvases } from "./canvas.js";
 
@@ -27,7 +27,7 @@ const IC = [<polygon points="24,4 44,14 44,34 24,44 4,34 4,14" />, <><circle cx=
 const spin = (k, base, step) => ({ animationDuration: base + k * step + "s", animationDirection: k % 2 ? "reverse" : "normal" });
 const Geo = () => (<svg className="geo" viewBox="0 0 400 400" aria-hidden="true">{[300, 240, 180, 120, 70].map((z, i) => <rect key={i} x={200 - z / 2} y={200 - z / 2} width={z} height={z} style={spin(i, 30, 10)} />)}</svg>);
 const Art = ({ i }) => (<svg viewBox="0 0 300 300" className="art" aria-hidden="true">{[0, 1, 2, 3, 4].map((k) => { const z = 260 - k * 48; return <rect key={k} x={150 - z / 2} y={150 - z / 2} width={z} height={z} style={spin(k, 30, 9)} />; })}<circle cx="150" cy="150" r={34 + i * 12} /></svg>);
-const Pat = ({ i }) => (<svg viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice" className="pt" aria-hidden="true">{[0, 1, 2, 3, 4, 5, 6].map((k) => { const h = 20 + ((i * 37 + k * 53) % 80); return <rect key={k} x={14 + k * 26} y={112 - h} width="16" height={h} fill="#ff5f24" fillOpacity={0.2 + k * 0.1} />; })}<polyline points={`14,${80 - i * 6} 40,60 66,70 92,40 118,50 144,25 170,${30 + i * 4}`} fill="none" stroke="#fff" strokeOpacity=".7" strokeWidth="2" /></svg>);
+const Pat = ({ i }) => (<svg viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice" className="pt" aria-hidden="true">{[0, 1, 2, 3, 4, 5, 6].map((k) => { const h = 20 + ((i * 37 + k * 53) % 80); return <rect key={k} x={14 + k * 26} y={112 - h} width="16" height={h} fill="#12d46b" fillOpacity={0.2 + k * 0.1} />; })}<polyline points={`14,${80 - i * 6} 40,60 66,70 92,40 118,50 144,25 170,${30 + i * 4}`} fill="none" stroke="#fff" strokeOpacity=".7" strokeWidth="2" /></svg>);
 
 /* ---------- shared bits ---------- */
 function A({ to, children, ...r }) {
@@ -58,12 +58,12 @@ function PackageCard({ s, i }) {
     </div>
   );
 }
-function ServiceCard({ s, i }) {
+function ServiceCard({ s, i, n }) {
   const { go, setFocusPk } = useContext(Ctx);
   const [open, setOpen] = useState(false);
   return (
     <div className={"cd sv rv" + (open ? " open" : "")} tabIndex="0" onClick={() => setOpen(!open)} onKeyDown={(e) => e.key === "Enter" && setOpen(!open)}>
-      <span className="pl">+</span><div className="ic2">{n2(i)}</div><h3>{s[0]}</h3><p>{s[1]}</p>
+      <span className="pl">+</span><div className="ic2">{n2(n ?? i)}</div><h3>{s[0]}</h3><p>{s[1]}</p>
       <div className="mr"><div>
         <ul>{s[2].map((b) => <li key={b}>{b}</li>)}</ul>
         <p><a className="tl2" href="#pricing" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setFocusPk(i); go("pricing"); }}>View packages &amp; pricing →</a></p>
@@ -110,7 +110,7 @@ const About = () => (<>
   <div className="s soft"><div className="w g2"><div className="cd hot rv"><span className="eb" style={{ color: "var(--teal)" }}>Founder</span><h3 style={{ fontSize: "1.8rem" }}>Kazi Mazharul Islam</h3><p style={{ marginTop: 6, color: "#d0d0d0" }}>Founder | Mazharul Intelligence</p></div><div className="mut"><p>Mazharul Intelligence was founded by Kazi Mazharul Islam with a vision to help businesses grow through intelligent solutions, organized operations and strategic support.</p><p style={{ marginTop: 14 }}>His professional background in business operations, finance administration, customer coordination, travel operations and data reporting contributes to the practical and service-oriented approach of Mazharul Intelligence.</p></div></div></div>
   <div className="s"><div className="w"><div className="gr"><div className="cd rv"><h3>Our mission</h3><p className="mut" style={{ marginTop: 10 }}>To make business support practical, organized and dependable through intelligent solutions, operational excellence and actionable business insights.</p></div><div className="cd rv"><h3>Our vision</h3><p className="mut" style={{ marginTop: 10 }}>To become a trusted business support and solutions partner, empowering organizations to improve performance, embrace innovation and achieve sustainable growth.</p></div></div>
     <h2 style={{ margin: "70px 0 28px", fontSize: "clamp(1.8rem,3.4vw,2.7rem)" }}>Our core values</h2><div className="gr">{VAL.map((v) => <div className="cd rv" key={v[0]}><h3>{v[0]}</h3><p className="mut" style={{ marginTop: 8 }}>{v[1]}</p></div>)}</div></div></div></>);
-const Services = () => (<><PageHead eb="Services" h1={<>Business support, <em>organized.</em></>} p="Nine services for everyday business needs. Select a card to see what is included and jump to its packages." /><div className="s"><div className="w gr">{SV.map((s, i) => <ServiceCard key={s[0]} s={s} i={i} />)}</div></div></>);
+const Services = () => (<><PageHead eb="Services" h1={<>Business support, <em>organized.</em></>} p="Creating long-term value for businesses and customers. Select a card to see what is included and jump to its packages." /><div className="s"><div className="w gr">{SVC.map((si, di) => <ServiceCard key={SV[si][0]} s={SV[si]} i={si} n={di} />)}</div></div></>);
 const Solutions = () => (<><PageHead eb="Business Solutions" h1={<>Smarter solutions for <em>modern challenges.</em></>} p="Practical solutions that help startups, SMEs, agencies and growing organizations improve operations, organize business information and strengthen their processes." />
   <div className="s"><div className="w gr sec3">{SOL.map((x, i) => <div className="cd rv" key={x[0]}><div className="tile"><Pat i={i + 2} /></div><h3>{x[0]}</h3><p className="mut" style={{ marginTop: 8 }}>{x[1]}</p></div>)}</div></div>
   <div className="s soft"><div className="w"><span className="eb">Industries we support</span><div className="gr">{IND.map((x) => <div className="cd rv" key={x}><h3>{x}</h3></div>)}</div></div></div>
@@ -157,8 +157,8 @@ export default function App() {
   useEffect(() => { const f = () => setShowTop(scrollY > 700); addEventListener("scroll", f, { passive: true }); f(); return () => removeEventListener("scroll", f); }, []);
   useEffect(() => { const f = (e) => e.key === "Escape" && setModal(null); addEventListener("keydown", f); return () => removeEventListener("keydown", f); }, []);
   useEffect(() => { /* reveal-on-scroll + count-up */
-    const io = new IntersectionObserver((en) => en.forEach((e) => { if (!e.isIntersecting) return; const el = e.target; el.classList.add("v"); if (el.dataset.n) { const n = +el.dataset.n, s = el.dataset.s, t0 = performance.now(); const tick = (t) => { const p = Math.min(1, (t - t0) / 1800); el.textContent = Math.round(n * (1 - Math.pow(1 - p, 4))) + s; if (p < 1) requestAnimationFrame(tick); }; tick(t0); } io.unobserve(el); }), { threshold: 0.15 });
-    const t = setTimeout(() => document.querySelectorAll(".rv:not(.v),[data-n]").forEach((el) => io.observe(el)), 60);
+    const io = new IntersectionObserver((en) => en.forEach((e) => { if (!e.isIntersecting) return; const el = e.target; el.dataset.v = "1"; if (el.dataset.n) { const n = +el.dataset.n, s = el.dataset.s, t0 = performance.now(); const tick = (t) => { const p = Math.min(1, (t - t0) / 1800); el.textContent = Math.round(n * (1 - Math.pow(1 - p, 4))) + s; if (p < 1) requestAnimationFrame(tick); }; tick(t0); } io.unobserve(el); }), { threshold: 0.15 });
+    const t = setTimeout(() => document.querySelectorAll(".rv:not([data-v]),[data-n]:not([data-v])").forEach((el) => io.observe(el)), 60);
     return () => { clearTimeout(t); io.disconnect(); };
   }, [page]);
   useEffect(() => { /* jump to a service's package card */
@@ -172,7 +172,7 @@ export default function App() {
     <Ctx.Provider value={{ go, openModal, req, toast, setFocusPk }}>
       <div id="ld" className={loaded ? "off" : ""}><div><i /><b /></div></div>
       <header><div className="w hb">
-        <A className="lg" to="home"><img src="/logo.png" alt="" className="lg-mark" /><span>Mazharul Intelligence</span></A>
+        <A className="lg" to="home"><img src="/logo.png?v=2" alt="Mazharul Intelligence" className="lg-mark" /><span>Mazharul Intelligence</span></A>
         <nav id="nav" className={menu ? "open" : ""}><ul>{NAV.map(([id, label]) => (
           <li key={id} className={id === "services" ? "dd" : undefined}><A to={id} className={page === id ? "on" : ""}>{label}</A>
             {id === "services" && <div className="mm"><div className="w">{SV.map((s) => <A key={s[0]} to="services"><b>{s[0]}</b><span>{s[1]}</span></A>)}</div></div>}</li>))}</ul></nav>
@@ -194,7 +194,7 @@ export default function App() {
       </div>
       {more && <button type="button" className="bn-backdrop" aria-label="Close menu" onClick={() => setMore(false)} />}
       <footer><div className="w"><div className="fw">
-        <div><A className="lg" to="home"><img src="/logo.png" alt="" className="lg-mark" /><span>Mazharul Intelligence</span></A><p>Your Growth, Our Intelligence.<br /><br />House #488A, Road #32, Mohakhali DOHS,<br />Dhaka-1206, Bangladesh</p></div>
+        <div><A className="lg" to="home"><img src="/logo.png?v=2" alt="Mazharul Intelligence" className="lg-mark" /><span>Mazharul Intelligence</span></A><p>Your Growth, Our Intelligence.<br /><br />House #488A, Road #32, Mohakhali DOHS,<br />Dhaka-1206, Bangladesh</p></div>
         <div><h4>Company</h4><A to="about">About Us</A><A to="process">Our Process</A><A to="contact">Contact Us</A></div>
         <div><h4>Solutions</h4><A to="services">Services</A><A to="solutions">Business Solutions</A><A to="pricing">Pricing</A></div>
         <div><h4>Connect</h4><a href={WAL} target="_blank" rel="noopener noreferrer">WhatsApp: +880 1302-622638</a><a href={FB} target="_blank" rel="noopener noreferrer">Facebook</a><a href={LI} target="_blank" rel="noopener noreferrer">LinkedIn</a></div>

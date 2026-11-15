@@ -1,6 +1,7 @@
 export const WA="8801302622638",TN=["Basic","Standard","Premium"],OTHER="Other / Custom Requirement";
 /* Content lives here: edit, or replace with a fetch from your CMS.
-   Service = [name, description, deliverables, billing ("month"|"one-time"|"package"), [[scope, price BDT] x Basic/Standard/Premium]] */
+   Service = [name, description, deliverables, billing ("month"|"one-time"|"package"), [[scope, price BDT] x Basic/Standard/Premium]]
+   SV order matches pricing groups A→C. SVC is the Services-page display order (brief 01–08). */
 export const SV=[
 ["B2B Lead Generation","Find and organize potential business clients through structured prospect research.",["Company and contact research","Business email research","Lead qualification","Industry categorization","Lead database and follow-up tracker"],"package",[["50 leads",2500],["150 leads",5500],["300 leads",10000]]],
 ["Excel, Power BI & Reporting","Data preparation, dashboards and reporting to monitor KPIs and business performance.",["Excel reporting and data cleaning","Power BI dashboards","KPI monitoring","Business performance analysis"],"package",[["1 cleaned workbook",2000],["1 dashboard + KPI report",5000],["Up to 3 dashboard pages",10000]]],
@@ -12,6 +13,8 @@ export const SV=[
 ["Travel Operations Support","Support travel businesses with booking administration and operational coordination.",["Travel enquiry coordination","Booking records","Itinerary documentation","Supplier follow-ups","Travel operations reporting"],"month",[["10 records/month",3000],["30 records/month",6000],["60 records/month",10000]]],
 ["ERP System Setup & Management Support","Assist businesses in organizing their processes through ERP configuration and implementation support.",["ERP requirement review","Basic system configuration","Module setup support","Workflow and user-role setup","Data preparation and migration coordination","Reports and user guidance"],"one-time",[["1 core module",8000],["Up to 3 modules",18000],["Up to 5 modules",35000]]]
 ];
+/* Services overview order from brief: 01 Ops → 02 Social → 03 Digital → 04 B2B → 05 ERP → 06 CRM → 07 VA → 08 Travel */
+export const SVC=[3,2,5,0,8,4,6,7];
 export const PG=[["A. Core Business Services",0,3],["B. Business Operations & Management",3,7],["C. Specialized Business Solutions",7,9]];
 export const SOL=[["Business Growth & Development","Market research, B2B lead generation, prospect research and business development support."],["Data Analytics & Business Intelligence","Excel reporting, data cleaning, Power BI dashboards, KPI monitoring and business performance analysis."],["Business Operations & Process Management","Workflow organization, operational coordination, administrative assistance and process improvement support."],["Customer Relationship & Engagement","CRM management, customer enquiry coordination, follow-up management and customer data organization."],["Digital Transformation & ERP Solutions","ERP requirements assessment, system configuration support, module coordination and digital workflow organization."],["Travel & Hospitality Business Support","Travel administration, booking coordination, documentation and operational reporting."]];
 export const IND=["Startups & Entrepreneurs","Ecommerce Businesses","Digital Marketing Agencies","Small & Medium-Sized Businesses","Travel & Hospitality Companies","Growing Organizations"];
