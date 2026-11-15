@@ -117,7 +117,7 @@ const Solutions = () => (<><PageHead eb="Business Solutions" h1={<>Smarter solut
   <div className="cta"><div className="w s"><h2>Tell us about your challenges and objectives.</h2><Talk>Request a Custom Business Solution</Talk></div></div></>);
 const Pricing = () => (<><PageHead eb="Service Packages & Pricing" h1={<>Clear packages. <em>Transparent pricing.</em></>} p="All prices are in Bangladeshi Taka (BDT). Choose Basic, Standard or Premium on any service and the price and scope update instantly." />
   <div className="s"><div className="w">
-    {PG.map((g) => <div key={g[0]}><h3 className="gh">{g[0]}</h3><div className="pgr">{SV.slice(g[1], g[2]).map((s, j) => <PackageCard key={s[0]} s={s} i={g[1] + j} />)}</div></div>)}
+    {PG.map((g) => { const items = SV.slice(g[1], g[2]); return <div key={g[0]}><h3 className="gh">{g[0]}</h3><div className={"pgr n" + items.length}>{items.map((s, j) => <PackageCard key={s[0]} s={s} i={g[1] + j} />)}</div></div>; })}
     <div className="cd hot" style={{ marginTop: 50, display: "flex", gap: 24, alignItems: "center", justifyContent: "space-between", flexWrap: "wrap" }}><div><h3>Need something different?</h3><p style={{ marginTop: 8, color: "#d0d0d0", maxWidth: 620 }}>Every business has different requirements. If your needs don’t match a listed package, request a custom quotation.</p></div><Talk custom>Request a Custom Quotation</Talk></div>
     <p className="mut" style={{ fontSize: 13, marginTop: 18 }}>Requests are enquiries only; this is not a booking or payment system. Final scope and inclusions are confirmed in your proposal.</p></div></div></>);
 const Process = () => (<><PageHead eb="Our Process" h1={<>A smarter approach to <em>business solutions.</em></>} p="A structured and transparent process built on clear communication, organized execution and continuous improvement." />
@@ -157,8 +157,8 @@ export default function App() {
   useEffect(() => { const f = () => setShowTop(scrollY > 700); addEventListener("scroll", f, { passive: true }); f(); return () => removeEventListener("scroll", f); }, []);
   useEffect(() => { const f = (e) => e.key === "Escape" && setModal(null); addEventListener("keydown", f); return () => removeEventListener("keydown", f); }, []);
   useEffect(() => { /* reveal-on-scroll + count-up */
-    const io = new IntersectionObserver((en) => en.forEach((e) => { if (!e.isIntersecting) return; const el = e.target; el.dataset.v = "1"; if (el.dataset.n) { const n = +el.dataset.n, s = el.dataset.s, t0 = performance.now(); const tick = (t) => { const p = Math.min(1, (t - t0) / 1800); el.textContent = Math.round(n * (1 - Math.pow(1 - p, 4))) + s; if (p < 1) requestAnimationFrame(tick); }; tick(t0); } io.unobserve(el); }), { threshold: 0.15 });
-    const t = setTimeout(() => document.querySelectorAll(".rv:not([data-v]),[data-n]:not([data-v])").forEach((el) => io.observe(el)), 60);
+    const io = new IntersectionObserver((en) => en.forEach((e) => { if (!e.isIntersecting) return; const el = e.target; el.dataset.v = "1"; if (el.dataset.n != null && el.dataset.s != null) { const n = +el.dataset.n, s = el.dataset.s, t0 = performance.now(); const tick = (t) => { const p = Math.min(1, (t - t0) / 1800); el.textContent = Math.round(n * (1 - Math.pow(1 - p, 4))) + s; if (p < 1) requestAnimationFrame(tick); }; tick(t0); } io.unobserve(el); }), { threshold: 0.15 });
+    const t = setTimeout(() => document.querySelectorAll(".rv:not([data-v]),[data-n][data-s]:not([data-v])").forEach((el) => io.observe(el)), 60);
     return () => { clearTimeout(t); io.disconnect(); };
   }, [page]);
   useEffect(() => { /* jump to a service's package card */

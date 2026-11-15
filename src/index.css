@@ -75,7 +75,10 @@ footer{background:var(--deep);color:#bdbdbd;padding:70px 0 0}footer .fw{display:
 
 #tr{flex-wrap:wrap;overflow:visible}#tr .tc{flex:1 1 280px}.tc h3{margin-top:-6px}
 .gh{font:800 12px var(--f);letter-spacing:.16em;text-transform:uppercase;color:var(--teal2);margin:50px 0 18px}.gh:first-child{margin-top:0}
-.pgr{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:22px}
+.pgr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;align-items:stretch}
+.pgr.n2,.pgr.n4{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(max-width:1000px){.pgr,.pgr.n2,.pgr.n4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.pgr,.pgr.n2,.pgr.n4{grid-template-columns:1fr}}
 .pk{display:flex;flex-direction:column}.pk.fx{border-color:var(--teal);box-shadow:0 0 0 4px rgba(18,212,107,.3)}
 .pk .bl{font:800 11px var(--f);letter-spacing:.12em;text-transform:uppercase;color:var(--teal2);margin-bottom:10px}
 .pk p.d{color:var(--mut);font-size:15px;margin:8px 0 18px}
