@@ -46,29 +46,41 @@ function PackageCard({ s, i }) {
   const { req } = useContext(Ctx);
   const [k, setK] = useState(1);
   const u = s[3];
+  const unit = u === "month" ? "/ month" : u === "one-time" ? "one-time" : "/ package";
   return (
     <div className="cd pk rv" id={"pk" + i}>
-      <span className="bl">{n2(i)} · {UL[u]}</span>
-      <h3>{s[0]}</h3><p className="d">{s[1]}</p>
-      <div className="sg">{TN.map((t, j) => <button key={t} type="button" className={j === k ? "on" : ""} onClick={() => setK(j)}>{t}{j === 1 && <small>Popular</small>}</button>)}</div>
-      <div className="pr">{u === "one-time" && <small>From </small>}BDT {fmt(s[4][k][1])} <small>{u === "month" ? "/ month" : u === "one-time" ? "one-time" : "/ package"}</small></div>
-      <ul className="fl"><li><b>{TN[k]}: {s[4][k][0]}</b></li>{s[2].map((x) => <li key={x}>{x}</li>)}</ul>
-      <details className="cmp"><summary>Compare all tiers</summary><table><tbody>{TN.map((t, j) => <tr key={t} className={j === k ? "on" : ""}><td>{t}</td><td>{s[4][j][0]}</td><td>BDT {fmt(s[4][j][1])}</td></tr>)}</tbody></table></details>
-      <a className="b" href="#contact" onClick={(e) => { e.preventDefault(); req(i, k); }}>Request This Package</a>
+      <div className="pk-top">
+        <span className="bl">{n2(i)} · {UL[u]}</span>
+        <h3>{s[0]}</h3>
+        <p className="d">{s[1]}</p>
+        <ul className="fl pk-inc">{s[2].map((x) => <li key={x}>{x}</li>)}</ul>
+      </div>
+      <div className="pk-tiers">
+        <div className="pk-head"><span>Package</span><span>Deliverables / Scope</span><span>Price (BDT)</span></div>
+        {TN.map((t, j) => (
+          <button key={t} type="button" className={"pk-row" + (j === k ? " on" : "")} onClick={() => setK(j)}>
+            <span><b>{t}</b>{j === 1 && <small>Popular</small>}</span>
+            <span>{s[4][j][0]}</span>
+            <span>{u === "one-time" && j === 0 ? "From " : ""}{fmt(s[4][j][1])} <small>{unit}</small></span>
+          </button>
+        ))}
+      </div>
+      <a className="b" href="#contact" onClick={(e) => { e.preventDefault(); req(i, k); }}>Request {TN[k]} Package</a>
     </div>
   );
 }
 function ServiceCard({ s, i, n }) {
   const { go, setFocusPk } = useContext(Ctx);
-  const [open, setOpen] = useState(false);
   return (
-    <div className={"cd sv rv" + (open ? " open" : "")} tabIndex="0" onClick={() => setOpen(!open)} onKeyDown={(e) => e.key === "Enter" && setOpen(!open)}>
-      <span className="pl">+</span><div className="ic2">{n2(n ?? i)}</div><h3>{s[0]}</h3><p>{s[1]}</p>
-      <div className="mr"><div>
-        <ul>{s[2].map((b) => <li key={b}>{b}</li>)}</ul>
-        <p><a className="tl2" href="#pricing" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setFocusPk(i); go("pricing"); }}>View packages &amp; pricing →</a></p>
-      </div></div>
-    </div>
+    <article className="cd sv rv" id={"sv" + i}>
+      <div className="sv-num">{n2(n ?? i)}</div>
+      <div className="sv-body">
+        <h3>{s[0]}</h3>
+        <p>{s[1]}</p>
+        <ul className="fl">{s[2].map((b) => <li key={b}>{b}</li>)}</ul>
+        <a className="tl2" href="#pricing" onClick={(e) => { e.preventDefault(); setFocusPk(i); go("pricing"); }}>View packages &amp; pricing →</a>
+      </div>
+    </article>
   );
 }
 
@@ -110,14 +122,14 @@ const About = () => (<>
   <div className="s soft"><div className="w g2"><div className="cd hot rv"><span className="eb" style={{ color: "var(--teal)" }}>Founder</span><h3 style={{ fontSize: "1.8rem" }}>Kazi Mazharul Islam</h3><p style={{ marginTop: 6, color: "#d0d0d0" }}>Founder | Mazharul Intelligence</p></div><div className="mut"><p>Mazharul Intelligence was founded by Kazi Mazharul Islam with a vision to help businesses grow through intelligent solutions, organized operations and strategic support.</p><p style={{ marginTop: 14 }}>His professional background in business operations, finance administration, customer coordination, travel operations and data reporting contributes to the practical and service-oriented approach of Mazharul Intelligence.</p></div></div></div>
   <div className="s"><div className="w"><div className="gr"><div className="cd rv"><h3>Our mission</h3><p className="mut" style={{ marginTop: 10 }}>To make business support practical, organized and dependable through intelligent solutions, operational excellence and actionable business insights.</p></div><div className="cd rv"><h3>Our vision</h3><p className="mut" style={{ marginTop: 10 }}>To become a trusted business support and solutions partner, empowering organizations to improve performance, embrace innovation and achieve sustainable growth.</p></div></div>
     <h2 style={{ margin: "70px 0 28px", fontSize: "clamp(1.8rem,3.4vw,2.7rem)" }}>Our core values</h2><div className="gr">{VAL.map((v) => <div className="cd rv" key={v[0]}><h3>{v[0]}</h3><p className="mut" style={{ marginTop: 8 }}>{v[1]}</p></div>)}</div></div></div></>);
-const Services = () => (<><PageHead eb="Services" h1={<>Business support, <em>organized.</em></>} p="Creating long-term value for businesses and customers. Select a card to see what is included and jump to its packages." /><div className="s"><div className="w gr">{SVC.map((si, di) => <ServiceCard key={SV[si][0]} s={SV[si]} i={si} n={di} />)}</div></div></>);
+const Services = () => (<><PageHead eb="Services" h1={<>Business support, <em>organized.</em></>} p="Creating long-term value for businesses and customers. Each service links to its packages and pricing." /><div className="s"><div className="w svl">{SVC.map((si, di) => <ServiceCard key={SV[si][0]} s={SV[si]} i={si} n={di} />)}</div></div></>);
 const Solutions = () => (<><PageHead eb="Business Solutions" h1={<>Smarter solutions for <em>modern challenges.</em></>} p="Practical solutions that help startups, SMEs, agencies and growing organizations improve operations, organize business information and strengthen their processes." />
   <div className="s"><div className="w gr sec3">{SOL.map((x, i) => <div className="cd rv" key={x[0]}><div className="tile"><Pat i={i + 2} /></div><h3>{x[0]}</h3><p className="mut" style={{ marginTop: 8 }}>{x[1]}</p></div>)}</div></div>
   <div className="s soft"><div className="w"><span className="eb">Industries we support</span><div className="gr">{IND.map((x) => <div className="cd rv" key={x}><h3>{x}</h3></div>)}</div></div></div>
   <div className="cta"><div className="w s"><h2>Tell us about your challenges and objectives.</h2><Talk>Request a Custom Business Solution</Talk></div></div></>);
 const Pricing = () => (<><PageHead eb="Service Packages & Pricing" h1={<>Clear packages. <em>Transparent pricing.</em></>} p="All prices are in Bangladeshi Taka (BDT). Choose Basic, Standard or Premium on any service and the price and scope update instantly." />
   <div className="s"><div className="w">
-    {PG.map((g) => { const items = SV.slice(g[1], g[2]); return <div key={g[0]}><h3 className="gh">{g[0]}</h3><div className={"pgr n" + items.length}>{items.map((s, j) => <PackageCard key={s[0]} s={s} i={g[1] + j} />)}</div></div>; })}
+    {PG.map((g) => <div key={g[0]} className="pg-sec"><h3 className="gh">{g[0]}</h3><div className="pgr">{SV.slice(g[1], g[2]).map((s, j) => <PackageCard key={s[0]} s={s} i={g[1] + j} />)}</div></div>)}
     <div className="cd hot" style={{ marginTop: 50, display: "flex", gap: 24, alignItems: "center", justifyContent: "space-between", flexWrap: "wrap" }}><div><h3>Need something different?</h3><p style={{ marginTop: 8, color: "#d0d0d0", maxWidth: 620 }}>Every business has different requirements. If your needs don’t match a listed package, request a custom quotation.</p></div><Talk custom>Request a Custom Quotation</Talk></div>
     <p className="mut" style={{ fontSize: 13, marginTop: 18 }}>Requests are enquiries only; this is not a booking or payment system. Final scope and inclusions are confirmed in your proposal.</p></div></div></>);
 const Process = () => (<><PageHead eb="Our Process" h1={<>A smarter approach to <em>business solutions.</em></>} p="A structured and transparent process built on clear communication, organized execution and continuous improvement." />
